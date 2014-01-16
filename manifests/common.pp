@@ -1,6 +1,6 @@
 class f3backup::common {
 
-    package { 'rdiff-backup': ensure => installed }
+  package { 'rdiff-backup': ensure => installed }
 
 }
 
