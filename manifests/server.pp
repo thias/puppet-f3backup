@@ -88,17 +88,25 @@ class f3backup::server (
   # The main backup script
   package { 'python-paramiko': ensure => installed }
   file { '/usr/local/bin/f3backup':
-    source  => "puppet:///modules/${module_name}/f3backup",
+    owner   => 'root',
+    group   => 'root',
     mode    => '0755',
+    source  => "puppet:///modules/${module_name}/f3backup",
     require => Package['python-paramiko'],
   }
 
   # The main configuration and exclude files
   file { '/etc/f3backup.ini':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
     content => template('f3backup/f3backup.ini.erb'),
   }
   file { '/etc/f3backup-exclude.txt':
-    source  => "puppet:///modules/${module_name}/f3backup-exclude.txt",
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
+    source => "puppet:///modules/${module_name}/f3backup-exclude.txt",
   }
 
   # The cron job to start it all
