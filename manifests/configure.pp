@@ -29,6 +29,7 @@ class f3backup::configure (
     content => template('f3backup/f3backup-host.ini.erb'),
     owner   => 'backup',
     group   => 'backup',
+    mode    => '0644',
     tag     => "f3backup-${backup_server}",
   }
 
@@ -37,6 +38,7 @@ class f3backup::configure (
       content => template("f3backup/exclude.txt.erb"),
       owner   => 'backup',
       group   => 'backup',
+      mode    => '0644',
       tag     => "f3backup-${backup_server}",
     }
   } else {
@@ -52,6 +54,9 @@ class f3backup::configure (
     realize File['/etc/f3backup']
     realize File['/etc/f3backup/facter']
     file { '/etc/f3backup/facter/backup_server.conf':
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
       content => $backup_server,
     }
   } else {
@@ -61,6 +66,9 @@ class f3backup::configure (
     realize File['/etc/f3backup']
     realize File['/etc/f3backup/facter']
     file { '/etc/f3backup/facter/myname.conf':
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
       content => $myname,
     }
   } else {
@@ -70,17 +78,23 @@ class f3backup::configure (
   # TODO : Fix all this...
   if $backup_mysql {
     file { '/usr/local/sbin/mysql-backup.sh':
+      owner   => 'root',
+      group   => 'root',
       mode    => '0700',
       content => template('f3backup/mysql-backup.sh.erb'),
     }
     file { $mysql_backupdir:
       ensure => directory,
+      owner  => 'root',
+      group  => 'root',
       mode   => '0700',
     }
     # Ugly hack to also create the parent dir for the default
     if $mysql_backupdir == '/root/backup/MySQL' {
       file { '/root/backup':
         ensure => directory,
+        owner  => 'root',
+        group  => 'root',
         mode   => '0700',
       }
     }

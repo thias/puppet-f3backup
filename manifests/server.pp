@@ -45,6 +45,7 @@ class f3backup::server (
     ensure  => directory,
     owner   => 'backup',
     group   => 'backup',
+    mode    => '0700',
     require => User['backup'];
   }
   file { '/var/log/f3backup':

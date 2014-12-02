@@ -27,6 +27,7 @@ class f3backup (
     ensure => $ensure,
     owner  => 'backup',
     group  => 'backup',
+    mode   => '0644',
     tag    => "f3backup-${backup_server}",
   }
 
