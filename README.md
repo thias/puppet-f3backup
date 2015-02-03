@@ -1,5 +1,10 @@
-F3 Backup
-=========
+# F3 Backup
+
+## Overview
+
+Simple filesystem-level backup solution based on rdiff-backup over ssh.
+
+## Examples
 
 Server Example :
 
@@ -70,5 +75,5 @@ Configurable options:
  * mysql_extraparameters (default=""): Extra parameters to be passed to mysqldump
  * mysql_sshuser (default="root"): user to be used to connect to the server
  * mysql_key (default="/backup/.ssh/id_rsa-mysql-backup"): ssh key to be used to connect to the server.
- * command_to_execute (default="/bin/true"): command to execute in the backup server if commandbackup=true
+ * `post_command` (default=none): command to execute in the backup server if commandbackup=true
 

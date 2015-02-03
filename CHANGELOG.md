@@ -1,5 +1,6 @@
 * Cosmetic changes.
 * Add missing file ownerships and modes.
+* Replace backup_command and command_to_execute with single post_command.
 
 2012-12-06 - 0.3.0
 * Clean up the module.
