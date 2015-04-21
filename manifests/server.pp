@@ -1,26 +1,26 @@
 class f3backup::server (
   # Name for the client resources to realize
-  $backup_server = 'default',
+  $backup_server             = 'default',
   # Home directory of the backup user
-  $backup_home = '/backup',
+  $backup_home               = '/backup',
   # Main f3backup.ini options
-  $threads = '5',
-  $lognameprefix = '%Y%m%d-',
-  $backup_rdiff = true,
-  $backup_mysql = false,
-  $backup_command = false,
+  $threads                   = '5',
+  $lognameprefix             = '%Y%m%d-',
+  $backup_rdiff              = true,
+  $backup_mysql              = false,
+  $backup_command            = false,
   $rdiff_global_exclude_file = '/etc/f3backup-exclude.txt, /backup/f3backup/%server%/exclude.txt',
-  $rdiff_user = 'root',
-  $rdiff_path = '/',
-  $rdiff_extra_parameters = '',
-  $rdiff_keep = '4W',
-  $mysql_sshuser = 'root',
-  $mysql_sshkey = '.ssh/id_rsa',
-  $command_to_execute = '/bin/true',
+  $rdiff_user                = 'root',
+  $rdiff_path                = '/',
+  $rdiff_extra_parameters    = '',
+  $rdiff_keep                = '4W',
+  $mysql_sshuser             = 'root',
+  $mysql_sshkey              = '.ssh/id_rsa',
+  $command_to_execute        = '/bin/true',
   # Cron job options
-  $cron_hour = '03',
-  $cron_minute = '00',
-  $cron_weekday = '*'
+  $cron_hour                 = '03',
+  $cron_minute               = '00',
+  $cron_weekday              = '*',
 ) {
 
   # TODO:

@@ -7,24 +7,11 @@ class f3backup (
 
   include '::f3backup::common'
 
-#  # Select the backup server, but allow override
-#  if $::f3backup_server {
-#    $backup_server = $::f3backup_server
-#  } else {
-#    $backup_server = $server
-#  }
-  $backup_server_final = $::f3backup_backup_server ? {
-    ''      => $backup_server,
-    undef   => $backup_server,
-    default => $::f3backup_backup_server,
-  }
-  $myname_final = $::f3backup_myname ? {
-    ''      => $myname,
-    undef   => $myname,
-    default => $::f3backup_myname,
+  if ( $myname == '' or $myname == undef ) {
+    fail('myname must not be empty')
   }
 
-  @@file { "${backup_home}/f3backup/${myname_final}":
+  @@file { "${backup_home}/f3backup/${myname}":
     # To support 'absent', though force will be needed
     ensure => $ensure,
     owner  => 'backup',

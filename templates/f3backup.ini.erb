@@ -48,10 +48,10 @@ sshuser =  <%= @mysql_sshuser %>
 ; ssh private key to be used
 sshkey = <%= @backup_home %>/<%= @mysql_sshkey %>
 <% end -%>
-<% if @backup_command -%>
+<% if @post_command -%>
 
 [command]
 ; Run a specific command on the backup server after the backup has finished
-command = <%= @command_to_execute %>
+command = <%= @post_command %>
 <% end -%>
 
