@@ -32,7 +32,7 @@ class f3backup::server (
   File <<| tag == "f3backup-${backup_server}" |>>
 
   # Useful to save space across backups of identical OSes
-  package { 'hardlinkpy': ensure => installed }
+  package { 'hardlinkpy': ensure => 'installed' }
 
   # Create user backup, who will connect to the clients
   user { 'backup':
@@ -42,14 +42,14 @@ class f3backup::server (
     managehome => true,
   }
   file { "${backup_home}/f3backup":
-    ensure  => directory,
+    ensure  => 'directory',
     owner   => 'backup',
     group   => 'backup',
     mode    => '0700',
     require => User['backup'];
   }
   file { '/var/log/f3backup':
-    ensure  => directory,
+    ensure  => 'directory',
     owner   => 'backup',
     group   => 'backup',
     mode    => '0700',
@@ -58,7 +58,7 @@ class f3backup::server (
 
   # Create directory where the ssh key pair will be stored
   file { "${backup_home}/.ssh":
-    ensure  => directory,
+    ensure  => 'directory',
     owner   => 'backup',
     group   => 'backup',
     mode    => '0700',
@@ -125,4 +125,3 @@ class f3backup::server (
   }
 
 }
-

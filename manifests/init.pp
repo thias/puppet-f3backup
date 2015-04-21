@@ -5,7 +5,7 @@ class f3backup (
   $ensure        = 'directory',
 ) {
 
-  include f3backup::common
+  include '::f3backup::common'
 
 #  # Select the backup server, but allow override
 #  if $::f3backup_server {
@@ -15,10 +15,12 @@ class f3backup (
 #  }
   $backup_server_final = $::f3backup_backup_server ? {
     ''      => $backup_server,
+    undef   => $backup_server,
     default => $::f3backup_backup_server,
   }
   $myname_final = $::f3backup_myname ? {
     ''      => $myname,
+    undef   => $myname,
     default => $::f3backup_myname,
   }
 
@@ -40,4 +42,3 @@ class f3backup (
 #  }
 
 }
-
