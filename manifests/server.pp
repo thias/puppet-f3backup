@@ -21,6 +21,7 @@ class f3backup::server (
   $cron_hour                 = '03',
   $cron_minute               = '00',
   $cron_weekday              = '*',
+  $cron_mailto               = 'root',
 ) {
 
   # TODO:
@@ -32,7 +33,7 @@ class f3backup::server (
   File <<| tag == "f3backup-${backup_server}" |>>
 
   # Useful to save space across backups of identical OSes
-  package { 'hardlinkpy': ensure => 'installed' }
+  package { 'hardlink': ensure => 'installed' }
 
   # Create user backup, who will connect to the clients
   user { 'backup':
@@ -117,7 +118,7 @@ class f3backup::server (
     hour    => $cron_hour,
     minute  => $cron_minute,
     weekday => $cron_weekday,
-    environment => [ 'MAILTO=root' ],
+    environment => [ "MAILTO=${cron_mailto}" ],
     require     => [
       User['backup'],
       File['/usr/local/bin/f3backup'],
