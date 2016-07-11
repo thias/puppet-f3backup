@@ -25,82 +25,88 @@ class f3backup::configure (
   $myname = $::fqdn,
 ) {
 
-  @@file { "${backup_home}/f3backup/${myname}/config.ini":
-    content => template('f3backup/f3backup-host.ini.erb'),
-    owner   => 'backup',
-    group   => 'backup',
-    mode    => '0644',
-    tag     => "f3backup-${backup_server}",
-  }
+  include '::f3backup'
 
-  if $rdiff_exclude {
-    @@file { "${backup_home}/f3backup/${myname}/exclude.txt":
-      content => template("f3backup/exclude.txt.erb"),
+  if $::f3backup::ensure != 'absent' {
+
+    @@file { "${backup_home}/f3backup/${myname}/config.ini":
+      content => template('f3backup/f3backup-host.ini.erb'),
       owner   => 'backup',
       group   => 'backup',
       mode    => '0644',
       tag     => "f3backup-${backup_server}",
     }
-  } else {
-    @@file { "${backup_home}/f3backup/${myname}/exclude.txt":
-      tag    => "f3backup-${backup_server}",
-      ensure => absent,
-    }
-  }
 
-  @file { '/etc/f3backup': ensure => directory }
-  @file { '/etc/f3backup/facter': ensure => directory }
-  if $backup_server != 'default' {
-    realize File['/etc/f3backup']
-    realize File['/etc/f3backup/facter']
-    file { '/etc/f3backup/facter/backup_server.conf':
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      content => $backup_server,
+    if $rdiff_exclude {
+      @@file { "${backup_home}/f3backup/${myname}/exclude.txt":
+        content => template("f3backup/exclude.txt.erb"),
+        owner   => 'backup',
+        group   => 'backup',
+        mode    => '0644',
+        tag     => "f3backup-${backup_server}",
+      }
+    } else {
+      @@file { "${backup_home}/f3backup/${myname}/exclude.txt":
+        tag    => "f3backup-${backup_server}",
+        ensure => absent,
+      }
     }
-  } else {
-    file { '/etc/f3backup/facter/backup_server.conf': ensure => absent }
-  }
-  if $myname != $::fqdn {
-    realize File['/etc/f3backup']
-    realize File['/etc/f3backup/facter']
-    file { '/etc/f3backup/facter/myname.conf':
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      content => $myname,
-    }
-  } else {
-    file { '/etc/f3backup/facter/myname.conf': ensure => absent }
-  }
 
-  # TODO : Fix all this...
-  if $backup_mysql {
-    file { '/usr/local/sbin/mysql-backup.sh':
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0700',
-      content => template('f3backup/mysql-backup.sh.erb'),
+    @file { '/etc/f3backup': ensure => directory }
+    @file { '/etc/f3backup/facter': ensure => directory }
+    if $backup_server != 'default' {
+      realize File['/etc/f3backup']
+      realize File['/etc/f3backup/facter']
+      file { '/etc/f3backup/facter/backup_server.conf':
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        content => $backup_server,
+      }
+    } else {
+      file { '/etc/f3backup/facter/backup_server.conf': ensure => absent }
     }
-    file { $mysql_backupdir:
-      ensure => directory,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0700',
+    if $myname != $::fqdn {
+      realize File['/etc/f3backup']
+      realize File['/etc/f3backup/facter']
+      file { '/etc/f3backup/facter/myname.conf':
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        content => $myname,
+      }
+    } else {
+      file { '/etc/f3backup/facter/myname.conf': ensure => absent }
     }
-    # Ugly hack to also create the parent dir for the default
-    if $mysql_backupdir == '/root/backup/MySQL' {
-      file { '/root/backup':
+
+    # TODO : Fix all this...
+    if $backup_mysql {
+      file { '/usr/local/sbin/mysql-backup.sh':
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0700',
+        content => template('f3backup/mysql-backup.sh.erb'),
+      }
+      file { $mysql_backupdir:
         ensure => directory,
         owner  => 'root',
         group  => 'root',
         mode   => '0700',
       }
+      # Ugly hack to also create the parent dir for the default
+      if $mysql_backupdir == '/root/backup/MySQL' {
+        file { '/root/backup':
+          ensure => directory,
+          owner  => 'root',
+          group  => 'root',
+          mode   => '0700',
+        }
+      }
+      if $mysql_encrypt != 'none' {
+        include '::f3backup::gpg_backup_key'
+      }
     }
-    if $mysql_encrypt != 'none' {
-      include '::f3backup::gpg_backup_key'
-    }
+
   }
 
 }

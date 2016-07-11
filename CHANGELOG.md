@@ -3,6 +3,7 @@
 * Replace backup_command and command_to_execute with single post_command.
 * Fixes for future parser compatibility.
 * Add cron_mailto parameter.
+* Get main class (client) ensure absent to work.
 
 2012-12-06 - 0.3.0
 * Clean up the module.
