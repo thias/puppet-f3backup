@@ -22,12 +22,7 @@ Client Examples :
         backup_rdiff => false,
     }
     # Exclude filesystem paths from the backup on a node
-    class { 'f3backup::configure':
-        rdiff_exclude => [
-            # The ** is a recursive glob
-            '/var/lib/mysql/**',
-        ],
-    }
+    f3backup::configure::exclude {'/var/lib/mysql/**': }
 
 You will need to deploy the ssh public key to the client nodes. Example :
     ssh_authorized_key { 'backup@back.example.com':

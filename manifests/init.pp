@@ -11,6 +11,17 @@ class f3backup (
     fail('myname must not be empty')
   }
 
+  if $ensure != 'absent' {
+    @@concat { "${backup_home}/f3backup/${myname}/exclude.txt":
+      owner   => 'backup',
+      group   => 'backup',
+      mode    => '0644',
+      force   => true,
+      ensure_newline => true,
+      tag     => "f3backup-${backup_server}",
+    }
+  }
+
   @@file { "${backup_home}/f3backup/${myname}":
     # To support 'absent', though force will be needed
     ensure => $ensure,
