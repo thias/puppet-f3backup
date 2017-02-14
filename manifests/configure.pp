@@ -38,18 +38,7 @@ class f3backup::configure (
     }
 
     if $rdiff_exclude {
-      @@file { "${backup_home}/f3backup/${myname}/exclude.txt":
-        content => template("f3backup/exclude.txt.erb"),
-        owner   => 'backup',
-        group   => 'backup',
-        mode    => '0644',
-        tag     => "f3backup-${backup_server}",
-      }
-    } else {
-      @@file { "${backup_home}/f3backup/${myname}/exclude.txt":
-        tag    => "f3backup-${backup_server}",
-        ensure => absent,
-      }
+      f3backup::configure::exclude { $rdiff_exclude: }
     }
 
     @file { '/etc/f3backup': ensure => directory }

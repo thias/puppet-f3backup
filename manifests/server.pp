@@ -31,6 +31,8 @@ class f3backup::server (
 
   # Virtual resources created by backup clients
   File <<| tag == "f3backup-${backup_server}" |>>
+  Concat <<| tag == "f3backup-${backup_server}" |>>
+  Concat::Fragment <<| tag == "f3backup-${backup_server}" |>>
 
   # Useful to save space across backups of identical OSes
   package { 'hardlink': ensure => 'installed' }
@@ -86,15 +88,21 @@ class f3backup::server (
     ],
     creates => "${backup_home}/.ssh/id_rsa",
   }
-  
+
+  if versioncmp($::operatingsystemrelease, '7') >= 0 {
+    $package_paramiko = 'python2-paramiko'
+  }  else {
+    $package_paramiko = 'python-paramiko'
+  }
+
   # The main backup script
-  package { 'python-paramiko': ensure => installed }
+  package { $package_paramiko: ensure => installed }
   file { '/usr/local/bin/f3backup':
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
     source  => "puppet:///modules/${module_name}/f3backup",
-    require => Package['python-paramiko'],
+    require => Package[$package_paramiko],
   }
 
   # The main configuration and exclude files
