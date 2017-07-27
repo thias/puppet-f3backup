@@ -22,6 +22,8 @@ class f3backup::server (
   $cron_minute               = '00',
   $cron_weekday              = '*',
   $cron_mailto               = 'root',
+  # ssh config entries
+  $ssh_config_hosts          = {},
 ) {
 
   # TODO:
@@ -69,7 +71,7 @@ class f3backup::server (
   }
   # Make ssh connections "relaxed" so that things work automatically
   file { "${backup_home}/.ssh/config":
-    source  => "puppet:///modules/${module_name}/ssh-config",
+    content => template("${module_name}/ssh-config.erb"),
     owner   => 'backup',
     group   => 'backup',
     mode    => '0600',
@@ -110,7 +112,7 @@ class f3backup::server (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template('f3backup/f3backup.ini.erb'),
+    content => template("${module_name}/f3backup.ini.erb"),
   }
   file { '/etc/f3backup-exclude.txt':
     owner  => 'root',

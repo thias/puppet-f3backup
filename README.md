@@ -13,6 +13,18 @@ Server Example :
     # The server can't back itself up, rdiff thinks it's already running
     class { 'f3backup::configure': backup_rdiff => false }
 
+    # More complex example
+    class { '::f3backup::server':
+      backup_home               => '/srv/backup',
+      rdiff_global_exclude_file => '/etc/f3backup-exclude.txt, /srv/backup/f3backup/%server%/exclude.txt',
+      cron_mailto               => 'jdoe@example.com',
+      ssh_config_hosts          => {
+        'server1.example.com' => [
+          'Port 1234',
+        ],
+      },
+    }
+
 Client Examples :
 
     # Enable full filesystem backup (from site.pp for all nodes)
