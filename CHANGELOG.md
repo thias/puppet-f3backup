@@ -4,6 +4,7 @@
 * Fixes for future parser compatibility.
 * Add cron_mailto parameter.
 * Get main class (client) ensure absent to work.
+* Update default excludes.
 
 2012-12-06 - 0.3.0
 * Clean up the module.
