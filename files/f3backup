@@ -319,6 +319,13 @@ class BackupRdiffBackup(Backup):
         args=[]
         args.append("/usr/bin/rdiff-backup")
 
+        # Add included files args
+        for file in self.server.config.get("global-include-file", "rdiff-backup").replace(" ", "").split(","):
+            if file:
+                if os.path.exists(file.replace("%server%", self.server.servername)):
+                    args.append("--include-globbing-filelist=" + file.replace("%server%", self.server.servername))
+
+        # Add excluded files args
         for file in self.server.config.get("global-exclude-file", "rdiff-backup").replace(" ","").split(",") + self.server.config.get("exclude-file", "rdiff-backup").replace(" ","").split(","):
             if file:
                 if os.path.exists(file.replace("%server%",self.server.servername)):

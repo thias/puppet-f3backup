@@ -20,6 +20,14 @@ class f3backup (
       ensure_newline => true,
       tag     => "f3backup-${backup_server}",
     }
+    @@concat { "${backup_home}/f3backup/${myname}/include.txt":
+      owner   => 'backup',
+      group   => 'backup',
+      mode    => '0644',
+      force   => true,
+      ensure_newline => true,
+      tag     => "f3backup-${backup_server}",
+    }
   }
 
   @@file { "${backup_home}/f3backup/${myname}":

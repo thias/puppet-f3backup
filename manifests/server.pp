@@ -10,6 +10,7 @@ class f3backup::server (
   $backup_mysql              = false,
   $backup_command            = false,
   $rdiff_global_exclude_file = '/etc/f3backup-exclude.txt, /backup/f3backup/%server%/exclude.txt',
+  $rdiff_global_include_file = '/backup/f3backup/%server%/include.txt',
   $rdiff_user                = 'root',
   $rdiff_path                = '/',
   $rdiff_extra_parameters    = '',
