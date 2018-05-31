@@ -25,6 +25,12 @@ backups = <% if @backup_rdiff %>rdiff-backup, <% end %><% if @backup_mysql %>mys
 <% if @backup_rdiff -%>
 
 [rdiff-backup]
+; Files containing inclusion lists for all nodes.
+; If multiple files are specified, they should be comma separated.
+; Some tags can be used:
+;   %server% : hostname
+global-include-file = <%= @rdiff_global_include_file %>
+
 ; Files containing exclusion lists. The global is for all nodes.
 ; If multiple files are specified, they should be comma separated.
 ; Some tags can be used:
