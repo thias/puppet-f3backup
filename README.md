@@ -11,7 +11,7 @@ Server Example :
     # The main backup server
     class { 'f3backup::server': }
     # The server can't back itself up, rdiff thinks it's already running
-    class { 'f3backup::configure': backup_rdiff => false }
+    class { 'f3backup': backup_rdiff => false }
 
     # More complex example
     class { '::f3backup::server':
@@ -30,27 +30,13 @@ Client Examples :
     # Enable full filesystem backup (from site.pp for all nodes)
     include f3backup
     # Disable full filesystem backup on a node
-    class { 'f3backup::configure':
+    class { 'f3backup':
         backup_rdiff => false,
     }
     # Exclude filesystem paths from the backup on a node
-    f3backup::configure::exclude {'/var/lib/mysql/**': }
+    f3backup::exclude {'/var/lib/mysql/**': }
 
-You will need to deploy the ssh public key to the client nodes. Example :
-    ssh_authorized_key { 'backup@back.example.com':
-        key     => 'AAAA...=='
-        type    => 'rsa',
-        user    => 'root',
-        options => [
-            'command="rdiff-backup --server --restrict-read-only /"',
-            'from="back.example.com,198.51.100.1"',
-            'no-port-forwarding',
-            'no-agent-forwarding',
-            'no-X11-forwarding',
-            'no-pty',
-        ],
-        ensure  => present,
-    }
+SSH keys are automatically exported on the server(s) and realized on client nodes.
 
 Testing or forcing a backup run :
 
@@ -58,29 +44,17 @@ Testing or forcing a backup run :
 $ f3backup -r node1.example.com /etc/f3backup.ini
 
 Configurable options:
- * force_backup_server (default=""): Force a specific backup server instead of the default one.
- * rdiffbackup (default=true): if true will run an rdiff-backup for the full filesystem
- * mysqlbackup (default=false): if true will run a mysqldump from all the MySQL databases
- * commandbackup (default=false): if true will run a specific command after all backups have finished
- * excludefiles (default=""): array with the directories to be excluded. Each specified directory will be added to the local exclude file. The format should be the same as in rdiff-backup.
+ * backup_home (default='/backup') Base folder to put the f3backup folder containing all backups.
+ * backup_server (default='default') Backup server that should perform backups on this client.
+ * myname (default=$::fqdn) Name of the server, by default it's full qualified domain name.
+ * ensure (default=present) Ensure backup is present or absent.
+ * backup_rdiff (default=true): if true will run an rdiff-backup for the full filesystem
+ * backup_command (default=false): if true will run a specific command after all backups have finished
+ * priority (default=10) Priority to perform the backup.
  * rdiff_keep (default=4W): time to keep the rdiff-backups
- * rdiff_extraparameters (default=""): extra parameters to be passed to rdiff-backup
- * mysql_backupdir (default="/root/backup/MySQL"): directory where to store the MySQL backups
- * mysql_daystokeep (default=3): days to keep the MySQL backups
- * mysql_monthstokeep (default=2): months to keep the MySQL backups
- * mysql_compress (default="gzip"): how to compress the MySQL backups. There are different options:
-  * gzip: compress with gzip on the fly
-  * bzip2: compress with bzip2 on the fly
-  * none: do not compress the dump
-  * later_gzip: compress with gzip after the dump has finished (useful to make the dump to run faster but it uses a lot more of disk space)
-  * later_bzip2: compress with bzip2 after the dump has finished (useful to make the dump to run faster but it uses a lot more of disk space)
- * mysql_encrypt (default="none"): how to encrypt the MySQL backups. There are different options:
-  * none: do not encrypt the backup
-  * gpg: use gpg on the fly.
-  * later_gpg: use gpg after the backup has finished.
- * mysql_lock_tables (default=true): Lock all databases when running the backup. If done, no process will be able to modify any table in the database, so if this happens all the processes will be locked until the backup has finished. Enabling this is the only way to run a consistent backup to be used for replication.
- * mysql_extraparameters (default=""): Extra parameters to be passed to mysqldump
- * mysql_sshuser (default="root"): user to be used to connect to the server
- * mysql_key (default="/backup/.ssh/id_rsa-mysql-backup"): ssh key to be used to connect to the server.
- * `post_command` (default=none): command to execute in the backup server if commandbackup=true
+ * rdiff_global_exclude_file  (default=""): array with the directories to be excluded. Each specified directory will be added to the local exclude file. The format should be the same as in rdiff-backup.
+ * rdiff_user (default='backup') User to use when performing the rdiff backups.
+ * rdiff_path (default='/') Base path for the rdiff backup.
+ * rdiff_extra_parameters (default=""): extra parameters to be passed to rdiff-backup.
+ * command_to_execute (default='/bin/true') Command to execute when performing the command backup.
 
