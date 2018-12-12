@@ -19,11 +19,6 @@ logdir = /var/log/f3backup
 ; http://docs.python.org/library/time.html#time.strftime
 lognameprefix = <%= @lognameprefix %>
 
-; Different types of backup. Will be done in the same order as specified here.
-; Valid options: rdiff-backup, mysql, command
-backups = <% if @backup_rdiff %>rdiff-backup, <% end %><% if @backup_mysql %>mysql, <% end %><% if @backup_command %>command<% end %>
-<% if @backup_rdiff -%>
-
 [rdiff-backup]
 ; Files containing exclusion lists. The global is for all nodes.
 ; If multiple files are specified, they should be comma separated.
@@ -37,21 +32,7 @@ path = <%= @rdiff_path %>
 ; Optional extra parameters for rdiff-backup
 extra-parameters = <%= @rdiff_extra_parameters %>
 
-; How long backups are going to be kept
-keep = <%= @rdiff_keep %>
-<% end -%>
-<% if @backup_mysql -%>
-
-[mysql]
-; ssh user to connect for running the backup
-sshuser =  <%= @mysql_sshuser %>
-; ssh private key to be used
-sshkey = <%= @backup_home %>/<%= @mysql_sshkey %>
-<% end -%>
-<% if @post_command -%>
-
 [command]
 ; Run a specific command on the backup server after the backup has finished
-command = <%= @post_command %>
-<% end -%>
+command = <%= @command_to_execute%>
 
