@@ -39,12 +39,15 @@
 /var/log/keepalived.log*
 /var/log/lastlog
 /var/log/lighttpd/*
+/var/log/lsyncd/*
 /var/log/maillog*
 /var/log/mailman/*
+/var/log/mariadb/*
 /var/log/messages*
 /var/log/nginx/*
 /var/log/nscd.log
 /var/log/ntpd.log
+/var/log/pgbouncer/*
 /var/log/php/*
 /var/log/prelink.log
 /var/log/prelink/prelink.log
