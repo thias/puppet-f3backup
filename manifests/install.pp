@@ -6,12 +6,12 @@
 
 class f3backup::install {
 
-  if $f3backup::package_manage {
+  include '::f3backup'
 
-    package { $f3backup::package_name:
-      ensure => $f3backup::package_ensure,
+  if $::f3backup::package_manage {
+    package { $::f3backup::package_name:
+      ensure => $::f3backup::package_ensure,
     }
-
   }
 
 }

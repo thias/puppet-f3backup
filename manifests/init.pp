@@ -36,10 +36,6 @@
 # Boolean:
 # Perform rdiff backup.
 #
-# [*backup_command*]
-# Boolean:
-# Perform command backup.
-#
 # [*priority*]
 # Integer:
 # Priority to perform the backup.
@@ -64,9 +60,9 @@
 # String:
 # Extra parameters to pass to the rdiff backup.
 #
-# [*command_to_execute*]
+# [*post_command*]
 # String:
-# Command to execute when performing the command backup.
+# Command to execute after performing the command backup.
 #
 # Package parameters
 #
@@ -101,14 +97,13 @@ class f3backup (
   $ensure        = 'present',
   # Client override parameters
   $backup_rdiff = true,
-  $backup_command = false,
   $priority = '10',
   $rdiff_keep = '4W',
   $rdiff_global_exclude_file = false,
   $rdiff_user = false,
   $rdiff_path = false,
   $rdiff_extra_parameters = '',
-  $command_to_execute = '/bin/true',
+  Optional[String] $post_command = undef,
 
   # Package parameters
   String $package_ensure = 'present',
@@ -116,8 +111,8 @@ class f3backup (
   String $package_name = 'rdiff-backup',
 ) {
 
-  contain f3backup::install
-  contain f3backup::config
+  contain '::f3backup::install'
+  contain '::f3backup::config'
 
   Class['::f3backup::install']
   -> Class['::f3backup::config']

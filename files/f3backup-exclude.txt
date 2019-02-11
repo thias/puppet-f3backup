@@ -19,9 +19,9 @@
 /var/lib/php/session/*
 /var/lib/puppet/clientbucket/**
 /var/lib/slocate/slocate.db.tmp
+/var/lib/xend/*socket
 /var/lib/xen/images/*
 /var/lib/xen/save/**
-/var/lib/xend/*socket
 /var/log/asterisk/*
 /var/log/boot.log*
 /var/log/btmp
@@ -34,6 +34,7 @@
 /var/log/ejabberd/ejabberd.log*
 /var/log/httpd/**
 /var/log/iptables.log*
+/var/log/journal/**
 /var/log/kannel/*
 /var/log/keepalived.log*
 /var/log/lastlog
@@ -45,9 +46,10 @@
 /var/log/nscd.log
 /var/log/ntpd.log
 /var/log/php/*
-/var/log/prelink/prelink.log
 /var/log/prelink.log
+/var/log/prelink/prelink.log
 /var/log/puppet/**
+/var/log/puppetlabs/**
 /var/log/radius/**
 /var/log/sa/*
 /var/log/samba/*
@@ -57,6 +59,8 @@
 /var/log/sphinx/*
 /var/log/spooler*
 /var/log/squale/*
+/var/log/squid/*
+/var/log/telegraf/*
 /var/log/tomcat6/*
 /var/log/ulogd/*
 /var/log/wtmp
@@ -75,8 +79,8 @@
 /var/run/proftpd/*
 /var/run/quagga/*
 /var/run/radiusd/*
-/var/run/setrans/.setrans-unix
 /var/run/setrans/**
+/var/run/setrans/.setrans-unix
 /var/run/setroubleshoot/*
 /var/run/wsgi.*.sock
 /var/run/xenstored/socket*

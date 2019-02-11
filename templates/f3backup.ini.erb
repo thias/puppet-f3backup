@@ -31,8 +31,10 @@ path = <%= @rdiff_path %>
 
 ; Optional extra parameters for rdiff-backup
 extra-parameters = <%= @rdiff_extra_parameters %>
+<% if @post_command -%>
 
 [command]
 ; Run a specific command on the backup server after the backup has finished
-command = <%= @command_to_execute%>
+command = <%= @post_command %>
+<% end -%>
 

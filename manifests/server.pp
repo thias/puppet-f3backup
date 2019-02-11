@@ -57,9 +57,9 @@
 # String:
 # Extra parameters to pass to the rdiff backup.
 #
-# [*command_to_execute*]
+# [*post_command*]
 # String:
-# Command to execute when performing the command backup.
+# Command to execute after performing the backup.
 #
 # Cron job options
 #
@@ -120,7 +120,7 @@ class f3backup::server (
   String $rdiff_user                = 'root',
   String $rdiff_path                = '/',
   String $rdiff_extra_parameters    = '',
-  String $command_to_execute        = '/bin/true',
+  Optional[String] $post_command    = undef,
   # Cron job options
   String $cron_hour                 = '03',
   String $cron_minute               = '00',
@@ -233,7 +233,7 @@ class f3backup::server (
   }
 
   # The main backup script
-  package { $package_paramiko: ensure => installed }
+  package { $package_paramiko: ensure => 'installed' }
   file { '/usr/local/bin/f3backup':
     owner   => 'root',
     group   => 'root',
