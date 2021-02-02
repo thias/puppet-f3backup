@@ -13,7 +13,6 @@ class f3backup::config {
       owner          => 'backup',
       group          => 'backup',
       mode           => '0644',
-      force          => true,
       ensure_newline => true,
       tag            => "f3backup-${::f3backup::backup_server}",
     }
