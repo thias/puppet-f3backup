@@ -421,15 +421,25 @@ class Config:
         self.__read(file)
 
     def __read(self, file):
-        self.config = configparser.ConfigParser(interpolation=None)
-        f = open(file)
-        self.config.read_file(f)
+        if is_py2:
+          self.config = configparser.ConfigParser()
+          f = open(file)
+          self.config.readfp(f)
+        else:
+          self.config = configparser.ConfigParser(interpolation=None)
+          f = open(file)
+          self.config.read_file(f)
         f.close()
 
     def override_with(self, file):
-        self.config2 = configparser.ConfigParser(interpolation=None)
-        f = open(file)
-        self.config2.read_file(f)
+        if is_py2:
+          self.config2 = configparser.ConfigParser()
+          f = open(file)
+          self.config2.readfp(f)
+        else:
+          self.config2 = configparser.ConfigParser(interpolation=None)
+          f = open(file)
+          self.config2.read_file(f)
         f.close
 
     def get(self, option, section="default"):
