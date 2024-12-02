@@ -8,6 +8,7 @@
 /proc/**
 /run/**
 /selinux/**
+/swap*
 /sys/**
 /tmp/**
 /var/cache/yum/**
