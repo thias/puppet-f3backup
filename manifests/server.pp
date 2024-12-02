@@ -226,7 +226,9 @@ class f3backup::server (
     }
   }
 
-  if versioncmp($::operatingsystemrelease, '7') >= 0 {
+  if versioncmp($::operatingsystemrelease, '9') >= 0 {
+    $package_paramiko = 'python3-paramiko'
+  }  elsif versioncmp($::operatingsystemrelease, '7') >= 0 {
     $package_paramiko = 'python2-paramiko'
   }  else {
     $package_paramiko = 'python-paramiko'
