@@ -1,4 +1,4 @@
-#### 2025-01-25 - 0.4.1
+#### 2025-01-25 - 0.4.2
 * Python 3 compatible (#7, @osgpcq).
 * Update default excludes.
 * Exclude ACLs from backup, expected to be restored separately.

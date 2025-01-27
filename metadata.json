@@ -1,6 +1,6 @@
 {
   "name": "thias-f3backup",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "author": "Matthias Saou",
   "summary": "F3 (Fr3nd) Backup Module.",
   "license": "Apache-2.0",
@@ -23,5 +23,7 @@
     "name": "puppet",
     "version_requirement": ">=4.0.0 <9.0.0"
     }
+  ],
+  "dependencies": [
   ]
 }
