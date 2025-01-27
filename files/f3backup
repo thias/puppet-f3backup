@@ -5,10 +5,16 @@
 Multithreaded modular backup script
 """
 
-import Queue
+import sys
+is_py2 = sys.version[0] == '2'
+if is_py2:
+  import Queue as queue
+  import ConfigParser as configparser
+else:
+  import queue
+  import configparser
 from threading import Thread
 from optparse import OptionParser
-import ConfigParser
 import time
 import os
 import sys
@@ -33,7 +39,7 @@ NONE     = 0
 LOG_ON_FILE   = INFO
 LOG_ON_SCREEN = WARNING
 
-class PriorityQueue(Queue.Queue):
+class PriorityQueue(queue.Queue):
     def _init(self, maxsize):
         self.maxsize = maxsize
         self.queue = []
@@ -53,12 +59,12 @@ class PriorityQueue(Queue.Queue):
         """Get an item from the queue"""
         return heapq.heappop(self.queue)
     def put(self, item, priority=0, block=True, timeout=None):
-        """shadow and wrap Queue.Queue's own `put' to allow a 'priority' argument"""
+        """shadow and wrap queue.Queue's own `put' to allow a 'priority' argument"""
         decorated_item = priority, time.time( ), item
-        Queue.Queue.put(self, decorated_item, block, timeout)
+        queue.Queue.put(self, decorated_item, block, timeout)
     def get(self, block=True, timeout=None):
-        """shadow and wrap Queue.Queue's own `get' to strip auxiliary aspects"""
-        priority, time_posted, item = Queue.Queue.get(self, block, timeout)
+        """shadow and wrap queue.Queue's own `get' to strip auxiliary aspects"""
+        priority, time_posted, item = queue.Queue.get(self, block, timeout)
         return item
 
 class SshConnection(object):
@@ -98,7 +104,7 @@ class SshConnection(object):
                 elif os.path.exists(os.path.expanduser('~/.ssh/id_dsa')):
                     private_key = '~/.ssh/id_dsa'
                 else:
-                    raise TypeError, "You have not specified a password or key."
+                    raise TypeError("You have not specified a password or key.")
 
             private_key_file = os.path.expanduser(private_key)
             rsa_key = paramiko.RSAKey.from_private_key_file(private_key_file)
@@ -171,17 +177,17 @@ class Logger:
 
     def __init__(self, file, prefix="", tag=None, log_on_screen=LOG_ON_SCREEN, log_on_file=LOG_ON_FILE):
         """Initialize the logs"""
-        self.file = open(os.path.dirname(file) + "/" + time.strftime(prefix) + os.path.basename(file),'a')
+        self.file = open(os.path.dirname(file) + "/" + time.strftime(str(prefix)) + os.path.basename(file),'a')
         self.log_on_screen = log_on_screen
         self.log_on_file = log_on_file
         self.tag = tag
-        self.__queue = Queue.Queue()
+        self.__queue = queue.Queue()
         self.Worker(self, self.__queue).start()
 
     def log(self, message, level):
         """log a message in a specific level"""
         if level <= LOG_ON_SCREEN:
-            print self.format(message, level, self.tag)
+            print(self.format(message, level, self.tag))
         if level <= LOG_ON_FILE:
             self.__queue.put((message, level))
 
@@ -304,10 +310,10 @@ class BackupCommand(Backup):
             else:
                 if process.returncode == 0:
                     self.server.logger.info("Custom command successfully executed (returncode=0)")
-                    self.server.logger.debug("stdout: " + output[0] + ", stderr: " + output[1])
+                    self.server.logger.debug("stdout: " + output[0].decode('utf-8') + ", stderr: " + output[1].decode('utf-8'))
                 else:
                     self.server.logger.critical("There was an error running the custom command. errorcode " + str(process.returncode))
-                    self.server.logger.critical("stdout: " + output[0] + ", stderr: " + output[1])
+                    self.server.logger.critical("stdout: " + output[0].decode('utf-8') + ", stderr: " + output[1].decode('utf-8'))
 
 class BackupRdiffBackup(Backup):
     """Class to backup using rdiff-backup"""
@@ -335,10 +341,10 @@ class BackupRdiffBackup(Backup):
         output = process.communicate()
         if process.returncode == 0:
             self.server.logger.info("rdiff-backup completed successfully")
-            self.server.logger.debug("stdout: " + output[0] + ", stderr: " + output[1])
+            self.server.logger.debug("stdout: " + output[0].decode('utf-8') + ", stderr: " + output[1].decode('utf-8'))
         else:
             self.server.logger.critical("There was an error running rdiff-backup: errorcode " + str(process.returncode))
-            self.server.logger.critical("stdout: " + output[0] + ", stderr: " + output[1])
+            self.server.logger.critical("stdout: " + output[0].decode('utf-8') + ", stderr: " + output[1].decode('utf-8'))
 
     def clean(self):
         # Delete old logs
@@ -354,10 +360,10 @@ class BackupRdiffBackup(Backup):
         output = process.communicate()
         if process.returncode == 0:
             self.server.logger.info("Old rdiff-backup backups successfully deleted")
-            self.server.logger.debug("stdout: " + output[0] + ", stderr: " + output[1])
+            self.server.logger.debug("stdout: " + output[0].decode('utf-8') + ", stderr: " + output[1].decode('utf-8'))
         else:
             self.server.logger.critical("There was an error deleting old backups: errorcode " + str(process.returncode))
-            self.server.logger.critical("stdout: " + output[0] + ", stderr: " + output[1])
+            self.server.logger.critical("stdout: " + output[0].decode('utf-8') + ", stderr: " + output[1].decode('utf-8'))
 
 class BackupMonkey:
     class Worker(Thread):
@@ -409,21 +415,31 @@ class BackupMonkey:
             thread.join()
 
 class Config:
-    """Wrapper to ConfigParser"""
+    """Wrapper to configparser"""
     def __init__(self, file, verbose=False):
         self.verbose = verbose
         self.__read(file)
 
     def __read(self, file):
-        self.config = ConfigParser.ConfigParser()
-        f = open(file)
-        self.config.readfp(f)
+        if is_py2:
+          self.config = configparser.ConfigParser()
+          f = open(file)
+          self.config.readfp(f)
+        else:
+          self.config = configparser.ConfigParser(interpolation=None)
+          f = open(file)
+          self.config.read_file(f)
         f.close()
 
     def override_with(self, file):
-        self.config2 = ConfigParser.ConfigParser()
-        f = open(file)
-        self.config2.readfp(f)
+        if is_py2:
+          self.config2 = configparser.ConfigParser()
+          f = open(file)
+          self.config2.readfp(f)
+        else:
+          self.config2 = configparser.ConfigParser(interpolation=None)
+          f = open(file)
+          self.config2.read_file(f)
         f.close
 
     def get(self, option, section="default"):
@@ -464,11 +480,11 @@ if __name__ == '__main__':
         config = Config(file=args[0], verbose = options.verbose)
     except IOError:
         parser.error("Could not open config file.")
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         parser.error("Config file not complete.")
 
     mainlogger = Logger(config.get("logdir") + "/" + "f3backup.log")
-    #, prefix=config.get("lognameprefix"))
+    #, prefix=config.get("lognameprefix")
     mainlogger.info("main - Backup started.")
     backup_monkey = BackupMonkey(num_workers=int(config.get("threads")), logger=mainlogger, dry=options.dry)
 
