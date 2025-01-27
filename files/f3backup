@@ -331,6 +331,7 @@ class BackupRdiffBackup(Backup):
                     args.append("--exclude-globbing-filelist=" + file.replace("%server%",self.server.servername))
         args.append("--no-hard-links")
         args.append("--no-eas")
+        args.append("--no-acls")
         if self.server.config.get("extra-parameters", "rdiff-backup") != "":
             args.append(self.server.config.get("extra-parameters", "rdiff-backup"))
         args.append(self.server.config.get("user", "rdiff-backup") + "@" + self.server.servername + "::" + self.server.config.get("path", "rdiff-backup"))
