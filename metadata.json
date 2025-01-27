@@ -1,6 +1,6 @@
 {
   "name": "thias-f3backup",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": "Matthias Saou",
   "summary": "F3 (Fr3nd) Backup Module.",
   "license": "Apache-2.0",
