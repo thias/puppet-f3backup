@@ -5,6 +5,7 @@
 /mnt/**
 /opt/fedora-ds/admin-serv/logs/cgisock.*
 /opt/fedora-ds/slapd-*/logs/*
+/opt/moxi/moxi.log*
 /proc/**
 /run/**
 /selinux/**
@@ -26,15 +27,18 @@
 /var/log/boot.log*
 /var/log/btmp
 /var/log/cacti/cacti.log*
+/var/log/clickhouse-server/*
 /var/log/cron*
 /var/log/cups/*
 /var/log/dhcpd.log*
 /var/log/dirsrv/slapd-*/*
 /var/log/dovecot.log*
 /var/log/ejabberd/ejabberd.log*
+/var/log/elasticsearch/**
 /var/log/httpd/**
 /var/log/iptables.log*
 /var/log/journal/**
+/var/log/kafka/*
 /var/log/kannel/*
 /var/log/keepalived.log*
 /var/log/lastlog
@@ -49,6 +53,7 @@
 /var/log/ntpd.log
 /var/log/pgbouncer/*
 /var/log/php/*
+/var/log/php-fpm/*
 /var/log/prelink.log
 /var/log/prelink/prelink.log
 /var/log/puppet/**
