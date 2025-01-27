@@ -1,3 +1,7 @@
+* Python 3 compatible (#7, @osgpcq).
+* Update default excludes.
+* Exclude ACLs from backup, expected to be restored separately.
+
 2018-12-12 - 0.4.0
 * Cosmetic changes.
 * Add missing file ownerships and modes.
