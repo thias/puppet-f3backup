@@ -12,6 +12,7 @@
 /swap*
 /sys/**
 /tmp/**
+/var/cache/netdata/**
 /var/cache/yum/**
 /var/lib/iscsi/nodes/*
 /var/lib/iscsi/send_targets/*
@@ -60,6 +61,7 @@
 /var/log/puppet/**
 /var/log/puppetlabs/**
 /var/log/radius/**
+/var/log/redis/*
 /var/log/sa/*
 /var/log/samba/*
 /var/log/secure*
