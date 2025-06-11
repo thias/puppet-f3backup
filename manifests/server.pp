@@ -101,7 +101,7 @@
 #   backup_server  => [ 'default', 'long-retention', 'officeA-servers' ],
 #   source_ssh_key => "puppet:///modules/${module_name}/id_rsa",
 #   source_ssh_pub => "puppet:///modules/${module_name}/id_rsa.pub",
-#   ssh_addresses  => [ $::ipaddress, $::ipaddress6, '10.1.2.3', '192.168.2.3' ],
+#   ssh_addresses  => [ $facts['networking']['ip'], $facts['networking']['ip6'], '10.1.2.3', '192.168.2.3' ],
 # }
 
 class f3backup::server (
@@ -112,7 +112,7 @@ class f3backup::server (
   # Ssh params
   Optional[String] $source_ssh_key  = undef,
   Optional[String] $source_ssh_pub  = undef,
-  Array $ssh_addresses              = [ $::ipaddress, $::ipaddress6 ],
+  Array $ssh_addresses              = [ $facts['networking']['ip'], $facts['networking']['ip6'] ],
   # Main f3backup.ini options
   Integer $threads                  = 5,
   String $lognameprefix             = '%Y%m%d-',
@@ -140,7 +140,7 @@ class f3backup::server (
     Concat::Fragment <<| tag == "f3backup-${server}" |>>
 
     if getvar('::f3backup_ssh_key') {
-      @@ssh_authorized_key { "f3backup-${::fqdn}-${server}":
+      @@ssh_authorized_key { "f3backup-${facts['networking']['fqdn']}-${server}":
         ensure  => present,
         user    => $rdiff_user,
         type    => 'ssh-rsa',
@@ -226,9 +226,9 @@ class f3backup::server (
     }
   }
 
-  if versioncmp($::operatingsystemrelease, '9') >= 0 {
+  if versioncmp($facts['os']['release']['major'], '9') >= 0 {
     $package_paramiko = 'python3-paramiko'
-  }  elsif versioncmp($::operatingsystemrelease, '7') >= 0 {
+  }  elsif versioncmp($facts['os']['release']['major'], '7') >= 0 {
     $package_paramiko = 'python2-paramiko'
   }  else {
     $package_paramiko = 'python-paramiko'

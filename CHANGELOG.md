@@ -1,4 +1,6 @@
+#### 2025-06-11 - 0.4.3
 * Update default excludes.
+* Update for legacy facts removal.
 
 #### 2025-01-25 - 0.4.2
 * Python 3 compatible (#7, @osgpcq).

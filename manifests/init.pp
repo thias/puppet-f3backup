@@ -93,7 +93,7 @@
 class f3backup (
   $backup_home   = '/backup',
   $backup_server = 'default',
-  $myname        = $::fqdn,
+  $myname        = $facts['networking']['fqdn'],
   $ensure        = 'present',
   # Client override parameters
   $backup_rdiff = true,
