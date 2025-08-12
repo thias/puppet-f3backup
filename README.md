@@ -78,7 +78,7 @@ $ f3backup -r node1.example.com -vvv /etc/f3backup.ini
 Configurable options:
  * `backup_home` (default='/backup') Base folder to put the f3backup folder containing all backups.
  * `backup_server` (default='default') Backup server that should perform backups on this client.
- * `myname` (default=$::fqdn) Name of the server, by default it's full qualified domain name.
+ * `myname` (default=${facts['networking']['fqdn']}) Name of the server, by default it's full qualified domain name.
  * `ensure` (default=present) Ensure backup is present or absent.
  * `backup_rdiff` (default=true): if true will run an rdiff-backup for the full filesystem
  * `backup_command` (default=false): if true will run a specific command after all backups have finished
